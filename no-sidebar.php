@@ -2,6 +2,18 @@
 include 'head.php';
 ?>
 
+<?php
+include("db.php");
+if (isset($_POST[submit])) {
+    $sql = "INSERT INTO queries(name,email,phone,query) values('$_POST[name]','$_POST[email]','$_POST[phone]','$_POST[message]')";
+    if ($qsql = mysqli_query($con, $sql)) {
+        echo "<script>alert('Message Delivered.');</script>";
+    } else {
+        echo mysqli_error($con);
+    }
+}
+?>
+
 <!-- Main -->
 <section id="main" class="wrapper style1">
     <header class="major">
@@ -15,7 +27,7 @@ include 'head.php';
             <div class="contact">
                 <div class="contact-form">
                     <!-- FORM  -->
-                    <form role="form" id="contact_form" class="contact-form" method="post" onSubmit="return false">
+                    <form method="post" action="" name="frmdept" onSubmit="return validateform()">
                         <div class="row">
                             <div class="col-md-6">
                                 <ul class="row" style="list-style-type:none;">
@@ -43,9 +55,11 @@ include 'head.php';
                                                 placeholder="Message">
                                         </label>
                                     </li>
-                                    <li class="col-sm-12 no-margin">
-                                        <button type="button" class="button fit special">Submit</button>
+                                    <li class="col">
+                                        <input class="button fit special" type="submit" name="submit" id="submit"
+                                            value="submit" />
                                     </li>
+
                                 </ul>
                             </div>
                         </div>
@@ -111,6 +125,38 @@ include 'head.php';
         </div>
     </div>
 </section>
+
+
+<script type="application/javascript">
+var alphaExp = /^[a-zA-Z]+$/; //Variable to validate only alphabets
+var alphaspaceExp = /^[a-zA-Z\s]+$/; //Variable to validate only alphabets and space
+var numericExpression = /^[0-9]+$/; //Variable to validate only numbers
+var alphanumericExp = /^[0-9a-zA-Z]+$/; //Variable to validate numbers and alphabets
+var emailExp = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/; //Variable to validate Email ID 
+
+function validateform() {
+    if (document.frmdept.name.value == "") {
+        alert("name should not be empty..");
+        document.frmdept.name.focus();
+        return false;
+    } else if (!document.frmdept.name.value.match(alphaspaceExp)) {
+        alert("name not valid..");
+        document.frmdept.name.focus();
+        return false;
+    } else if (!document.frmdept.email.value.match(emailExp)) {
+        alert("email not valid..");
+        document.frmdept.email.focus();
+        return false;
+    } else if (!document.frmdept.phone.value.match(numericExpression)) {
+        alert("phone number not valid..");
+        document.frmdept.phone.focus();
+        return false;
+    } else {
+        return true;
+    }
+}
+</script>
+
 
 <?php
 include 'foot.php';
